@@ -1,0 +1,42 @@
+#include <stdio.h>
+
+//Gustavo Rondinelli de Oliveira
+
+int num, d10, d20, op;    //inicio o programa declarando as variaveis que serao : valor do produto, desconto de 10%, desconto de 20% e opcao do case.
+
+int main()
+{
+    printf("Leitura de preco de produtos\n\n");    //come�o aprensentando o programa ao usuario e pe�o que interaja com as op��es
+    printf("Insira o valor do produto:");
+    scanf("%d", &num);
+
+    printf("Escolha uma das opcoes abaixo:\n\n");
+    printf("1 - Preco do produto com 10 por cento de desconto\n");   //apresento a ele as op��es de escolha
+    printf("2 - Preco do produto com 20 por cento de desconto\n");
+    printf("3 - Encerrar programa\n");
+    scanf("%d", &op);
+
+    d10 =  num-((num * 10)/100)  ;   //uso uma formula basica para que seja alocado os descontos com base na escolha do usuario e calcule o valor e a presente ja com o desconto
+    d20 =  num-((num * 20)/100)  ;
+
+    switch(op)
+    {
+        case 1:
+            printf("O valor do produto sera de %d\n", d10);  //aqui crio um case com uma saida de dados para cara op��o selecionada
+            break;
+
+        case 2:
+            printf("O valor do produto sera de %d\n", d20);
+            break;
+
+        case 3:
+            return 0;
+            break;
+
+        default:
+            printf("Opcao invalida!!\n"); //crio um bloqueio e uma mensagem caso o usuario digite um numero que n�o seja uma das op��es
+            break;
+    }
+ return 0; // encerro o programa
+}
+
