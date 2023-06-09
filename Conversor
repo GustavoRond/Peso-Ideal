@@ -1,0 +1,23 @@
+#include <stdio.h>
+
+//Gustavo Rondinelli 
+
+int f, c; //declaracao das variaveis para cada unidade de medida
+
+int main(){
+
+    printf("Conversor de Temperatura\n"); //titulo e apresentacao do aplicativo
+    printf("========================\n\n");
+    printf("Converta Fahrenheit para Celsius\n");
+    printf("================================\n\n");
+
+    printf("Digite a temperatura em Fahrenheit que deseja converter: "); //entrada de dados, para que o usuario possa interagir com o aplicativo
+    scanf("%i", &f);
+
+    c = 5.0 * (f - 32.0) / 9.0; //calculo da convers�o, dada na lista de exercicios
+
+    printf("A temperatura de %i graus Fahrenheit eh de %i graus em Celsius\n\n", f, c); //saida de dados, apresentacao dos resultado ao usuario
+
+
+}
+
