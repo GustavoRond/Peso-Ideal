@@ -1,59 +1,111 @@
-/*
-    Programa para escrever registros de dados em arquivoss
-    Autor: Gustavo Rondinelli de Oliveira
-    Data: 15/09/2023
-*/
-
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 #define N_REG 32
 
 typedef char Disc[5];
 
-struct reg{
+struct reg {
     int RA;
     char nome[256];
-    Disc matriculas[6]; //Cria uma matriz para armazenar dados
+    Disc matriculas[6];
     float CR, CP;
 };
 
 typedef struct reg Reg_alunos;
 
-Reg_alunos dados[N_REG] = {
-    {12436, "Maria", {"MC102", "MA141", "F 128", "F 129"}, 0.0, 0.0},  //O terceiro item sao as matriculas que serao armazenadas na matriz Matriculas
-    {12232, "Joao", {"MC202", "MA211", "F 228", "F 229"}, 0.8, 0.15}
-};
+void leitura( char *nome, Reg_alunos *dados, int *numAlunos);
+void escreve_dados( char *nome, Reg_alunos *dados, int numAlunos);
+void listar_alunos( char *nome);
 
-void escreve_dados(void);
+int main(void) {
+    Reg_alunos dados[N_REG];
+    int numAlunos = 0;
+    char nomeArquivo[] = "dados_alunos.bin";
 
-int main(void){
-    leitura();
-    escreve_dados();
-    return(0);
-}
+    printf("Menu:\n");
+    printf("1. Inserir aluno\n");
+    printf("2. Listar alunos\n");
+    printf("3. Sair\n");
 
-void leitura(float Disc[5], char i){
-    printf("Nome do aluno:");
-    scanf("%d", &i);
+    int opcao;
+    do {
+        printf("Escolha uma opcao: ");
+        scanf("%d", &opcao);
 
-    i == dados->nome;
-    printf("%d", dados[i]);
-
-}
-
-void escreve_dados(void){
-    FILE *fw;
-
-    fw = fopen("dados_aluno.bin", "w");  //o W faz com que abra o arquivo no modo leitura
-
-    if (fw == NULL){
-        perror("dados_aluno.bin");
-        exit(-1);
+        switch (opcao) {
+            case 1:
+                leitura(nomeArquivo, dados, &numAlunos);
+                break;
+            case 2:
+                listar_alunos(nomeArquivo);
+                break;
+            case 3:
+                printf("Saindo do programa.\n");
+                break;
+            default:
+                printf("Opcao invalida. Tente novamente.\n");
         }
+    } while (opcao != 3);
 
-    fwrite(dados, sizeof(Reg_alunos), N_REG, fw);
+    return 0;
+}
+
+void leitura( char *nome, Reg_alunos *dados, int *numAlunos) {
+    if (*numAlunos == N_REG) {
+        printf("Limite de registros alcancado. Nao eh possivel adicionar mais alunos.\n");
+        return;
+
+    }
+
+    printf("Nome do aluno: ");
+    scanf("%s", dados[*numAlunos].nome);
+    printf("RA: ");
+    scanf("%d", &dados[*numAlunos].RA);
+    printf("Matriculas:");
+    scanf("%s", &dados[*numAlunos].matriculas);
+    printf("CR:");
+    scanf("%f", &dados[*numAlunos].CR);
+    printf("CP:");
+    scanf("%f", &dados[*numAlunos].CP);
+
+    (*numAlunos)++;
+    escreve_dados(nome, dados, *numAlunos);
+}
+
+void escreve_dados( char *nome,  Reg_alunos *dados, int numAlunos) {
+    FILE *fw = fopen(nome, "w");
+
+    if (fw == NULL) {
+        perror(nome);
+        exit(-1);
+    }
+
+    fwrite(dados, sizeof(Reg_alunos), numAlunos, fw);
     fclose(fw);
-    return;
+}
 
+void listar_alunos( char *nome) {
+    FILE *fr = fopen(nome, "rb");
+
+    if (fr == NULL) {
+        perror(nome);
+        return;
+    }
+
+    Reg_alunos aluno;
+
+    printf("\nLista de Alunos:\n");
+
+    while (fread(&aluno, sizeof(Reg_alunos), 1, fr) == 1) {
+        printf("Nome: %s\n", aluno.nome);
+        printf("RA: %d\n", aluno.RA);
+        printf("Matriculas: %c\n", aluno.matriculas);
+        printf("CR: %0.2f\n", aluno.CR);
+        printf("CP: %0.2f\n", aluno.CP);
+        printf("\n");
+    }
+
+    fclose(fr);
 }
